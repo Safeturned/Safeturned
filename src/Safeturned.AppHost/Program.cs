@@ -10,6 +10,9 @@ var imageTag = config["IMAGE_TAG_SUFFIX"] ?? "dev";
 
 var env = builder.AddDockerComposeEnvironment("safeturned")
     .WithSshDeploySupport()
+    // No dashboard in prod: nobody opens it, and the compose publisher put it on a random public
+    // host port with no auth, so anyone scanning the server could read every log and trace.
+    .WithDashboard(enabled: false)
     .WithProperties(env =>
     {
         env.DefaultNetworkName = "safeturned-network";
